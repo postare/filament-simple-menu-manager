@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Postare\SimpleMenuManager\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class SimpleMenuManagerCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'filament-simple-menu-manager';
 
     public $description = 'My command';
 

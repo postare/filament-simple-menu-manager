@@ -1,20 +1,23 @@
 <?php
 
-namespace VendorName\Skeleton;
+namespace Postare\SimpleMenuManager;
 
 use Filament\Contracts\Plugin;
 use Filament\Panel;
+use Postare\SimpleMenuManager\Filament\Resources\MenuResource;
 
-class SkeletonPlugin implements Plugin
+class SimpleMenuManagerPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'skeleton';
+        return 'filament-simple-menu-manager';
     }
 
     public function register(Panel $panel): void
     {
-        //
+        $panel->resources([
+            MenuResource::class,
+        ]);
     }
 
     public function boot(Panel $panel): void
