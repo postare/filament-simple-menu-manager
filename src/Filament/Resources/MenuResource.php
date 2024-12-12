@@ -21,6 +21,16 @@ class MenuResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bars-4';
 
+    public static function getModelLabel(): string
+    {
+        return config('simple-menu-manager.model_label');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return config('simple-menu-manager.plural_model_label');
+    }
+
     public static function getNavigationSort(): ?int
     {
         return config('simple-menu-manager.navigation_sort');
