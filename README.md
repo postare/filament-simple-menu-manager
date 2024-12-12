@@ -2,6 +2,8 @@
 
 This plugin provides an intuitive and versatile menu manager for your frontends built with **FilamentPHP**. Leveraging **saade/filament-adjacency-list**, it supports tree hierarchies for a clean and organized menu structure. It’s designed to let you easily add and customize any type of menu item you need.
 
+A special thanks to **[awcodes](https://github.com/awcodes)** for inspiring this plugin with their experimental project, **[awcodes/sparky](https://github.com/awcodes/sparky)**. Your work served as a great starting point for creating this flexible menu manager.
+
 ### Included Menu Item Types
 
 -   **Link**: a simple customizable link.
