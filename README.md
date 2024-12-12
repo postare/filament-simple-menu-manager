@@ -76,8 +76,7 @@ return [
 Creating new menu item types is quick and easy thanks to the included dedicated command:
 
 ```bash
-# Syntax:
-php artisan make:menu-handler {name} {panel?}
+# Syntax: php artisan make:menu-handler {name} {panel?}
 
 # Example: A menu item for your blog categories
 php artisan make:menu-handler BlogCategory
