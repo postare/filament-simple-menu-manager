@@ -3,9 +3,11 @@
 use Postare\SimpleMenuManager\Filament\Resources\MenuResource\MenuTypeHandlers;
 
 return [
-    // Navigation
-    'navigation_group' => 'CMS',
+    // Resource configuration
+    'navigation_group' => 'Portale',
     'navigation_sort' => 1,
+    'model_label' => 'Menu',
+    'plural_model_label' => 'Menu',
 
     // Menu Model
     'model' => Postare\SimpleMenuManager\Models\Menu::class,
