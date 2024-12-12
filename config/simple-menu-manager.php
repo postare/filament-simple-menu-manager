@@ -4,7 +4,7 @@ use Postare\SimpleMenuManager\Filament\Resources\MenuResource\MenuTypeHandlers;
 
 return [
     // Resource configuration
-    'navigation_group' => 'Portale',
+    'navigation_group' => 'CMS',
     'navigation_sort' => 1,
     'model_label' => 'Menu',
     'plural_model_label' => 'Menu',
