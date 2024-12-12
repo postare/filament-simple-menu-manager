@@ -18,7 +18,8 @@ return [
      * */
     'handlers' => [
         'link' => MenuTypeHandlers\LinkType::class,
-        'page' => MenuTypeHandlers\PageType::class,
+        // Uncomment this line if you are using z3d0x/filament-fabricator
+        // 'page' => MenuTypeHandlers\PageType::class,
         'placeholder' => MenuTypeHandlers\PlaceholderType::class,
     ],
 ];

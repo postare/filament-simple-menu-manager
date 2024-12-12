@@ -1,11 +1,16 @@
-# This is my package filament-simple-menu-manager
+# Simple Menu Manager for Filament
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/postare/filament-simple-menu-manager.svg?style=flat-square)](https://packagist.org/packages/postare/filament-simple-menu-manager)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/postare/filament-simple-menu-manager/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/postare/filament-simple-menu-manager/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/postare/filament-simple-menu-manager/fix-php-code-styling.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/postare/filament-simple-menu-manager/actions?query=workflow%3A"Fix+PHP+code+styling"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/postare/filament-simple-menu-manager.svg?style=flat-square)](https://packagist.org/packages/postare/filament-simple-menu-manager)
+This plugin provides an intuitive and versatile menu manager for your frontends built with **FilamentPHP**. Leveraging **saade/filament-adjacency-list**, it supports tree hierarchies for a clean and organized menu structure. It’s designed to let you easily add and customize any type of menu item you need.
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+### Included Menu Item Types
+
+-   **Link**: a simple customizable link.
+-   **Page**: automatically generates a link by selecting a page created with **z3d0x/filament-fabricator**.
+-   **Placeholder**: a placeholder, perfect for organizing submenus.
+
+### Extensibility
+
+The plugin is highly extensible. You can quickly and easily create new menu item types using the included dedicated command. This makes it an ideal solution for projects requiring a scalable and customizable menu system.
 
 ## Installation
 
@@ -57,11 +62,73 @@ return [
      * */
     'handlers' => [
         'link' => MenuTypeHandlers\LinkType::class,
-        'page' => MenuTypeHandlers\PageType::class,
+        // Uncomment this line if you are using z3d0x/filament-fabricator
+        // 'page' => MenuTypeHandlers\PageType::class,
         'placeholder' => MenuTypeHandlers\PlaceholderType::class,
     ],
 ];
 ```
+
+## Command to Create Custom Handlers
+
+Creating new menu item types is quick and easy thanks to the included dedicated command:
+
+```bash
+# Syntax:
+php artisan make:menu-handler {name} {panel?}
+
+# Example: A menu item for your blog categories
+php artisan make:menu-handler BlogCategory
+```
+
+Replace `{name}` with the name of your new menu item type.
+The command will generate a new handler class that you can customize to suit your specific needs.
+If you’re using multiple panels, include the `{panel}` argument to specify the target panel.
+
+### Generated Handler Class
+
+When you use the custom handler command, this is what the generated menu handler class will look like:
+
+```php
+namespace App\Filament\SimpleMenu\Handlers;
+
+use Filament\Forms\Components;
+use Postare\SimpleMenuManager\Filament\Resources\MenuResource\MenuTypeHandlers\MenuTypeInterface;
+use Postare\SimpleMenuManager\Filament\Resources\MenuResource\Traits\CommonFieldsTrait;
+
+class BlogCategoryHandler implements MenuTypeInterface
+{
+    use CommonFieldsTrait;
+
+    public function getName(): string
+    {
+        // If necessary, you can modify the name of the menu type
+        return "Blog Category";
+    }
+
+    public static function getFields(): array
+    {
+        // Add the necessary fields for your menu type in this array
+        return [
+            // Components\TextInput::make('url')
+            //     ->label('URL')
+            //     ->required()
+            //     ->columnSpanFull(),
+
+            // Common fields for all menu types
+            Components\Section::make(__('simple-menu-manager::simple-menu-manager.common.advanced_settings'))
+                ->schema(self::commonLinkFields())
+                ->collapsed(),
+        ];
+    }
+}
+```
+
+You can add all the fields you need using the familiar and standard FilamentPHP components, giving you full flexibility to tailor your menu items to your project’s requirements.
+
+## No Predefined Views
+
+Currently, this plugin does not include any predefined views, as it aims to provide maximum flexibility in how you manage your menus. Below are some examples of how you can handle your menu data on the frontend. However, feel free to use any approach that best suits your project or preferences.
 
 ## Contributing
 
