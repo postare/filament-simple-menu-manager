@@ -2,7 +2,7 @@
 
 namespace Postare\SimpleMenuManager\Filament\Resources\MenuResource\MenuTypeHandlers;
 
-use App\Models\Page;
+use Z3d0X\FilamentFabricator\Models\Page;
 use Filament\Forms;
 use Filament\Forms\Components;
 use Postare\SimpleMenuManager\Filament\Resources\MenuResource\Traits\CommonFieldsTrait;
@@ -22,7 +22,7 @@ class PageType implements MenuTypeInterface
         return [
             Components\Select::make('parent_id')
                 ->label('Pagina')
-                ->options(fn () => Page::pluck('title', 'id')->toArray())
+                ->options(fn() => Page::pluck('title', 'id')->toArray())
                 ->required()
                 ->dehydrated()
                 ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
@@ -42,7 +42,7 @@ class PageType implements MenuTypeInterface
             Components\TextInput::make('url')
                 ->readOnly()
                 ->label('URL')
-                ->hidden(fn (Forms\Get $get) => $get('parent_id') == null)
+                ->hidden(fn(Forms\Get $get) => $get('parent_id') == null)
                 ->required()
                 ->columnSpanFull(),
             Components\Section::make(__('simple-menu-manager::simple-menu-manager.common.advanced_settings'))
