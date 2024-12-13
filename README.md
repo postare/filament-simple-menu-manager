@@ -303,7 +303,9 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## Credits
 
 -   [Francesco Apruzzese](https://github.com/postare)
--   [All Contributors](../../contributors)
+-   [awcodes](https://github.com/awcodes) for inspiring this plugin with their experimental project [awcodes/sparky](https://github.com/awcodes/sparky).
+-   Portions of this code were inspired by or adapted from the open-source community, particularly projects like [saade/filament-adjacency-list](https://github.com/saade/filament-adjacency-list) and [z3d0x/filament-fabricator](https://github.com/z3d0x/filament-fabricator).
+-   [FilamentPHP](https://filamentphp.com) for providing the foundational framework and components used in this plugin.
 
 ## License
 
