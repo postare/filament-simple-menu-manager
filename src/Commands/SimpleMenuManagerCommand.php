@@ -45,7 +45,7 @@ class SimpleMenuManagerCommand extends Command
 
             $this->info("Don't forget to add the handler to the config file");
             //line to add to the config file
-            $config_line = "'" . Str::snake($this->argument('name')) . "'" . ' => App\\Filament\\' . ($this->argument('panel') ? ucfirst($this->argument('panel')) . '\\' : '') . 'SimpleMenu\\Handlers\\' . $this->getSingularClassName($this->argument('name')) . 'Handler::class,';
+            $config_line = "'".Str::snake($this->argument('name'))."'".' => App\\Filament\\'.($this->argument('panel') ? ucfirst($this->argument('panel')).'\\' : '').'SimpleMenu\\Handlers\\'.$this->getSingularClassName($this->argument('name')).'Handler::class,';
             $this->info($config_line);
         } else {
             $this->warn("File : {$path} already exits");
@@ -57,7 +57,7 @@ class SimpleMenuManagerCommand extends Command
      */
     public function getStubPath(): string
     {
-        return __DIR__ . '/../../stubs/handler.stub';
+        return __DIR__.'/../../stubs/handler.stub';
     }
 
     /**
@@ -68,7 +68,7 @@ class SimpleMenuManagerCommand extends Command
     {
         return [
             'TITLE' => $this->getTitleFromClassName($this->argument('name')),
-            'PANEL' => $this->argument('panel') ? ucfirst($this->argument('panel')) . '\\' : '',
+            'PANEL' => $this->argument('panel') ? ucfirst($this->argument('panel')).'\\' : '',
             'CLASS_NAME' => $this->getSingularClassName($this->argument('name')),
         ];
     }
@@ -76,7 +76,7 @@ class SimpleMenuManagerCommand extends Command
     /**
      * Get the stub path and the stub variables
      */
-    public function getSourceFile(): string | array | bool
+    public function getSourceFile(): string|array|bool
     {
         return $this->getStubContents($this->getStubPath(), $this->getStubVariables());
     }
@@ -84,12 +84,12 @@ class SimpleMenuManagerCommand extends Command
     /**
      * Replace the stub variables(key) with the desire value
      */
-    public function getStubContents(string $stub, array $stubVariables = []): string | array | bool
+    public function getStubContents(string $stub, array $stubVariables = []): string|array|bool
     {
         $contents = file_get_contents($stub);
 
         foreach ($stubVariables as $search => $replace) {
-            $contents = str_replace('$' . $search . '$', $replace, $contents);
+            $contents = str_replace('$'.$search.'$', $replace, $contents);
         }
 
         return $contents;
@@ -101,9 +101,9 @@ class SimpleMenuManagerCommand extends Command
     public function getSourceFilePath(): string
     {
         $panel = $this->argument('panel');
-        $panelPrefix = $panel ? ucfirst($panel) . '\\' : '';
+        $panelPrefix = $panel ? ucfirst($panel).'\\' : '';
 
-        $path = base_path('app\\Filament\\' . $panelPrefix . 'SimpleMenu') . '\\Handlers\\' . $this->getSingularClassName($this->argument('name')) . 'Handler.php';
+        $path = base_path('app\\Filament\\'.$panelPrefix.'SimpleMenu').'\\Handlers\\'.$this->getSingularClassName($this->argument('name')).'Handler.php';
 
         return str_replace('\\', '/', $path);
     }
@@ -119,6 +119,7 @@ class SimpleMenuManagerCommand extends Command
     public function getTitleFromClassName($name): string
     {
         $singular = $this->getSingularClassName($name);
+
         return Str::title(Str::snake($singular, ' '));
     }
 

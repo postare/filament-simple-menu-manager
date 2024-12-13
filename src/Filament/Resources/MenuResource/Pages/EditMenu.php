@@ -2,9 +2,9 @@
 
 namespace Postare\SimpleMenuManager\Filament\Resources\MenuResource\Pages;
 
-use Postare\SimpleMenuManager\Filament\Resources\MenuResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Postare\SimpleMenuManager\Filament\Resources\MenuResource;
 
 class EditMenu extends EditRecord
 {

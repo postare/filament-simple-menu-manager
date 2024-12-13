@@ -2,9 +2,9 @@
 
 namespace Postare\SimpleMenuManager\Filament\Resources\MenuResource\Pages;
 
-use Postare\SimpleMenuManager\Filament\Resources\MenuResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Postare\SimpleMenuManager\Filament\Resources\MenuResource;
 
 class ListMenus extends ListRecords
 {

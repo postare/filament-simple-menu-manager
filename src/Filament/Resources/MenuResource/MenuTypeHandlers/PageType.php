@@ -25,16 +25,22 @@ class PageType implements MenuTypeInterface
                 ->options(fn () => Page::pluck('title', 'id')->toArray())
                 ->required()
                 ->dehydrated()
-                ->afterStateUpdated(function ($state, Forms\Set $set) {
+                ->afterStateUpdated(function ($state, Forms\Set $set, Forms\Get $get) {
                     if (! $state) {
                         return;
                     }
                     $page_url = FilamentFabricator::getPageUrlFromId($state);
                     $set('url', $page_url);
-                    $set('label', Page::find($state)->title);
+
+                    // Set the label only if it is empty
+                    if ($get('label') == null) {
+
+                        $set('label', Page::find($state)->title);
+                    }
                 })
                 ->columnSpanFull(),
             Components\TextInput::make('url')
+                ->readOnly()
                 ->label('URL')
                 ->hidden(fn (Forms\Get $get) => $get('parent_id') == null)
                 ->required()

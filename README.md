@@ -1,5 +1,8 @@
 # Simple Menu Manager for Filament
 
+![PHP Version](https://img.shields.io/badge/php-%3E%3D8.2-blue)
+![License](https://img.shields.io/github/license/postare/filament-simple-menu-manager)
+
 This plugin provides an intuitive and versatile menu manager for your frontends built with **FilamentPHP**. Leveraging **saade/filament-adjacency-list**, it supports tree hierarchies for a clean and organized menu structure. It’s designed to let you easily add and customize any type of menu item you need.
 
 A special thanks to **[awcodes](https://github.com/awcodes)** for inspiring this plugin with their experimental project, **[awcodes/sparky](https://github.com/awcodes/sparky)**. Your work served as a great starting point for creating this flexible menu manager.
@@ -13,6 +16,12 @@ A special thanks to **[awcodes](https://github.com/awcodes)** for inspiring this
 ### Extensibility
 
 The plugin is highly extensible. You can quickly and easily create new menu item types using the included dedicated command. This makes it an ideal solution for projects requiring a scalable and customizable menu system.
+
+### Prerequisites
+
+-   PHP >= 8.2
+-   Laravel >= 11.x
+-   FilamentPHP >= 3.x
 
 ## Installation
 
@@ -127,9 +136,161 @@ class BlogCategoryHandler implements MenuTypeInterface
 
 You can add all the fields you need using the familiar and standard FilamentPHP components, giving you full flexibility to tailor your menu items to your project’s requirements.
 
-## No Predefined Views
+## Visualizzazione del menu nel frontend
 
-Currently, this plugin does not include any predefined views, as it aims to provide maximum flexibility in how you manage your menus. Below are some examples of how you can handle your menu data on the frontend. However, feel free to use any approach that best suits your project or preferences.
+To ensure proper integration, add this line to the content section of your `tailwind.config.js`:
+
+```js
+    content: [
+        // ...
+        "./vendor/postare/filament-simple-menu-manager/resources/views/**/*.blade.php",
+    ],
+```
+
+### Adding the Livewire Component to Your Page
+
+Don’t forget to specify the menu's slug when adding the Livewire component to your page:
+
+```html
+<livewire:simple-menu-manager slug="main-menu" />
+```
+
+Below is the structure of the Livewire component:
+
+```php
+<div @class([
+    'hidden' => !$menu,
+])>
+    <x-dynamic-component :component="'menus.' . $slug . $variant" :name="$menu->name" :items="$menu->items" />
+</div>
+```
+
+As you can see, the implementation is straightforward. Thanks to `<x-dynamic-component>`, you have the freedom to create custom menu components tailored to your needs. You can also define different menu variants simply by appending them to the component's name.
+
+#### Component Example
+
+Create the following file structure to define your custom menu:
+
+-   `index.blade.php` in `resources/views/components/menus/main-menu`
+
+```php
+@props([
+    'name' => null,
+    'items' => [],
+])
+
+<nav id="main-menu">
+    <ul class="flex items-center">
+        @foreach ($items as $item)
+            <x-menus.main-menu.item :item="$item" />
+        @endforeach
+    </ul>
+</nav>
+```
+
+-   `item.blade.php` in `resources/views/components/menus/main-menu`
+
+```php
+
+@props([
+    'item' => null,
+    'active' => false,
+])
+
+@php
+    $itemClasses = 'text-xl inline-block w-full px-4 py-2 text-sm text-gray-700 hover:text-black focus:text-black';
+@endphp
+
+<li>
+    @if (filled($item['children']))
+        <x-dropdown>
+            <x-slot:trigger>
+                <button type="button" {{ $attributes->class([$itemClasses, '' => $active, 'flex items-center gap-2']) }}>
+                    <span>{{ $item['label'] }}</span>
+                    @svg('heroicon-s-chevron-down', '-me-2 h-3 w-3')
+                </button>
+            </x-slot>
+
+            <ul class="">
+                @foreach ($item['children'] as $child)
+                    <x-menus.main-menu.item :item="$child" />
+                @endforeach
+            </ul>
+        </x-dropdown>
+    @else
+        @if (isset($item['url']))
+            <a href="{{ $item['url'] }}" @if ($item['target']) target="{{ $item['target'] }}" @endif @if ($item['rel']) rel="{{ $item['rel'] }}" @endif
+                {{ $attributes->class([$itemClasses, '' => active_route($item['url'])]) }}>
+                {{ $item['label'] }}
+            </a>
+        @else
+            <span {{ $attributes->class([$itemClasses, '' => $active]) }}>
+                {{ $item['label'] }}
+            </span>
+        @endif
+    @endif
+</li>
+```
+
+-   `dropdown.blade.php` in `resources/views/components/menus`
+
+```php
+@props([
+    'maxHeight' => null,
+    'offset' => 8,
+    'placement' => 'bottom-start',
+    'shift' => false,
+    'teleport' => false,
+    'trigger' => null,
+    'width' => null,
+])
+
+@php
+    use Filament\Support\Enums\MaxWidth;
+@endphp
+
+<div x-data="{
+    submenuOpen: false,
+    toggle: function(event) {
+        this.submenuOpen = !this.submenuOpen
+    },
+    open: function(event) {
+        this.submenuOpen = true
+    },
+    close: function(event) {
+        this.submenuOpen = false
+    },
+}" {{ $attributes->class(['dropdown relative']) }}>
+    <div x-on:click="toggle" {{ $trigger->attributes->class(['dropdown-trigger flex cursor-pointer']) }}>
+        {{ $trigger }}
+    </div>
+    <div x-cloak @click.outside="submenuOpen = false" x-show="submenuOpen"
+        x-float{{ $placement ? ".placement.{$placement}" : '' }}.flip{{ $shift ? '.shift' : '' }}{{ $teleport ? '.teleport' : '' }}{{ $offset ? '.offset' : '' }}="{ offset: {{ $offset }} }" x-ref="panel" x-transition:enter-start="opacity-0"
+        x-transition:leave-end="opacity-0" @class([
+            'dropdown-panel absolute z-10 w-auto divide-y divide-neutral-100 rounded-lg bg-white shadow-lg ring-1 ring-neutral-950/5 transition',
+        ]) @style([
+            "max-height: {$maxHeight}" => $maxHeight,
+        ])>
+        {{ $slot }}
+    </div>
+</div>
+```
+
+### Variants Explained
+
+The Simple Menu Manager supports menu **variants**, allowing you to reuse the same menu structure with different designs or behaviors.
+
+#### How to Use Variants
+
+Pass the `variant` parameter in the Livewire component:
+
+```html
+<livewire:menu slug="main-menu" variant="footer" />
+```
+
+This tells the system to look for the corresponding Blade file:
+
+`resources/views/components/menus/{slug}/{variant}.blade.php`
 
 ## Contributing
 
@@ -147,3 +308,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+```
+
+```

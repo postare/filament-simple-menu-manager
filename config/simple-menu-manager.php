@@ -22,4 +22,7 @@ return [
         // 'page' => MenuTypeHandlers\PageType::class,
         'placeholder' => MenuTypeHandlers\PlaceholderType::class,
     ],
+
+    // Livewire component
+    'menu_cache' => 1, // Cache time in seconds, each menu has its own cache
 ];

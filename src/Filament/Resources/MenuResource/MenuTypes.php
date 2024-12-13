@@ -2,10 +2,7 @@
 
 namespace Postare\SimpleMenuManager\Filament\Resources\MenuResource;
 
-use Illuminate\Support\Facades\Config;
 use Postare\SimpleMenuManager\Filament\Resources\MenuResource\MenuTypeHandlers\MenuTypeInterface;
-use Illuminate\Support\Facades\File;
-use ReflectionClass;
 
 /**
  * Questa classe fornisce metodi per ottenere i tipi di menu e i campi associati a un tipo specificato.
@@ -39,6 +36,7 @@ class MenuTypes
         }
 
         $handlerClass = $handlers[$type];
+
         return app($handlerClass)::getFields();
     }
 

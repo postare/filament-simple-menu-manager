@@ -10,7 +10,7 @@ class SimpleMenuManagerPlugin implements Plugin
 {
     public function getId(): string
     {
-        return 'filament-simple-menu-manager';
+        return 'simple-menu-manager';
     }
 
     public function register(Panel $panel): void

@@ -65,6 +65,7 @@ class MenuResource extends Resource
                     ->maxLength(255),
                 AdjacencyList::make('items')
                     ->label(__('simple-menu-manager::simple-menu-manager.resource.items'))
+                    ->labelKey('label')
                     ->addAction(fn (Action $action): Action => $action
                         ->label(__('simple-menu-manager::simple-menu-manager.resource.add_item'))
                         ->icon('heroicon-o-plus')
@@ -72,17 +73,20 @@ class MenuResource extends Resource
                     ->columnSpanFull()
                     ->rulers()
                     ->form([
-                        Forms\Components\Select::make('type')
-                            ->label(__('simple-menu-manager::simple-menu-manager.resource.type'))
-                            ->live()
-                            ->options(MenuTypes::getTypes())
-                            ->default('link')
-                            ->required(),
+                        Grid::make()
+                            ->columns(2)
+                            ->schema([
+                                Forms\Components\Select::make('type')
+                                    ->label(__('simple-menu-manager::simple-menu-manager.resource.type'))
+                                    ->live()
+                                    ->options(MenuTypes::getTypes())
+                                    ->default('link')
+                                    ->required(),
 
-                        Forms\Components\TextInput::make('label')
-                            ->label(__('simple-menu-manager::simple-menu-manager.resource.label'))
-                            ->required(),
-
+                                Forms\Components\TextInput::make('label')
+                                    ->label(__('simple-menu-manager::simple-menu-manager.resource.label'))
+                                    ->required(),
+                            ]),
                         Grid::make()
                             ->hidden(fn (Get $get) => $get('type') == null)
                             ->reactive()

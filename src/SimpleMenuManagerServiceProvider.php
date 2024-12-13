@@ -10,11 +10,13 @@ use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
 use Illuminate\Filesystem\Filesystem;
 use Livewire\Features\SupportTesting\Testable;
+use Livewire\Livewire;
+use Postare\SimpleMenuManager\Commands\SimpleMenuManagerCommand;
+use Postare\SimpleMenuManager\Livewire\Menu;
+use Postare\SimpleMenuManager\Testing\TestsSimpleMenuManager;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Postare\SimpleMenuManager\Commands\SimpleMenuManagerCommand;
-use Postare\SimpleMenuManager\Testing\TestsSimpleMenuManager;
 
 class SimpleMenuManagerServiceProvider extends PackageServiceProvider
 {
@@ -62,19 +64,22 @@ class SimpleMenuManagerServiceProvider extends PackageServiceProvider
 
     public function packageBooted(): void
     {
-        // Asset Registration
-        FilamentAsset::register(
-            $this->getAssets(),
-            $this->getAssetPackageName()
-        );
+        // // Asset Registration
+        // FilamentAsset::register(
+        //     $this->getAssets(),
+        //     $this->getAssetPackageName()
+        // );
 
-        FilamentAsset::registerScriptData(
-            $this->getScriptData(),
-            $this->getAssetPackageName()
-        );
+        // FilamentAsset::registerScriptData(
+        //     $this->getScriptData(),
+        //     $this->getAssetPackageName()
+        // );
 
-        // Icon Registration
-        FilamentIcon::register($this->getIcons());
+        // // Icon Registration
+        // FilamentIcon::register($this->getIcons());
+
+        // LiveWire Component Registration
+        Livewire::component('simple-menu-manager', Menu::class);
 
         // Handle Stubs
         if (app()->runningInConsole()) {
@@ -85,8 +90,8 @@ class SimpleMenuManagerServiceProvider extends PackageServiceProvider
             }
         }
 
-        // Testing
-        Testable::mixin(new TestsSimpleMenuManager);
+        // // Testing
+        // Testable::mixin(new TestsSimpleMenuManager);
     }
 
     protected function getAssetPackageName(): ?string
