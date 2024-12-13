@@ -1,10 +1,12 @@
 {
     "name": "postare/filament-simple-menu-manager",
-    "description": "This is my package filament-simple-menu-manager",
+    "description": "Intuitive and versatile Menu Manager for your frontends built with FilamentPHP",
     "keywords": [
-        "postare",
         "laravel",
-        "filament-simple-menu-manager"
+        "filamentadmin",
+        "filamentphp-plugin",
+        "filament-plugin",
+        "filament"
     ],
     "homepage": "https://github.com/postare/filament-simple-menu-manager",
     "support": {
@@ -44,7 +46,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            
+
             "Postare\\SimpleMenuManager\\Tests\\": "tests/"
         }
     },

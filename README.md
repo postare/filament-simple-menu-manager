@@ -1,6 +1,6 @@
 # Simple Menu Manager for Filament
 
-![PHP Version](https://img.shields.io/badge/php-%3E%3D8.2-blue)
+![PHP Version](https://img.shields.io/badge/php-%3E%3D8.1-blue)
 ![License](https://img.shields.io/github/license/postare/filament-simple-menu-manager)
 
 This plugin provides an intuitive and versatile menu manager for your frontends built with **FilamentPHP**. Leveraging **saade/filament-adjacency-list**, it supports tree hierarchies for a clean and organized menu structure. It’s designed to let you easily add and customize any type of menu item you need.
@@ -19,7 +19,7 @@ The plugin is highly extensible. You can quickly and easily create new menu item
 
 ### Prerequisites
 
--   PHP >= 8.2
+-   PHP >= 8.1
 -   Laravel >= 11.x
 -   FilamentPHP >= 3.x
 
@@ -313,7 +313,3 @@ Please review [our security policy](../../security/policy) on how to report secu
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-```
-
-```
