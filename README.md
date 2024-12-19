@@ -9,9 +9,9 @@ A special thanks to **[awcodes](https://github.com/awcodes)** for inspiring this
 
 ### Included Menu Item Types
 
--   **Link**: a simple customizable link.
--   **Page**: automatically generates a link by selecting a page created with **z3d0x/filament-fabricator**.
--   **Placeholder**: a placeholder, perfect for organizing submenus.
+- **Link**: a simple customizable link.
+- **Page**: automatically generates a link by selecting a page created with **z3d0x/filament-fabricator**.
+- **Placeholder**: a placeholder, perfect for organizing submenus.
 
 ### Extensibility
 
@@ -19,9 +19,9 @@ The plugin is highly extensible. You can quickly and easily create new menu item
 
 ### Prerequisites
 
--   PHP >= 8.1
--   Laravel >= 11.x
--   FilamentPHP >= 3.x
+- PHP >= 8.1
+- Laravel >= 11.x
+- FilamentPHP >= 3.x
 
 ## Installation
 
@@ -174,7 +174,7 @@ As you can see, the implementation is straightforward. Thanks to `<x-dynamic-com
 
 Create the following file structure to define your custom menu:
 
--   `index.blade.php` in `resources/views/components/menus/main-menu`
+- `index.blade.php` in `resources/views/components/menus/main-menu`
 
 ```php
 @props([
@@ -182,98 +182,108 @@ Create the following file structure to define your custom menu:
     'items' => [],
 ])
 
-<nav id="main-menu">
-    <ul class="flex items-center">
-        @foreach ($items as $item)
-            <x-menus.main-menu.item :item="$item" />
-        @endforeach
-    </ul>
-</nav>
+<div class="flex flex-col -mx-6 lg:mx-8 lg:flex-row lg:items-center">
+    @foreach ($items as $item)
+        <x-menus.main-menu.item :item="$item" />
+    @endforeach
+</div>
 ```
 
--   `item.blade.php` in `resources/views/components/menus/main-menu`
+- `item.blade.php` in `resources/views/components/menus/main-menu`
 
 ```php
-
 @props([
     'item' => null,
     'active' => false,
 ])
 
 @php
-    $itemClasses = 'text-xl inline-block w-full px-4 py-2 text-sm text-gray-700 hover:text-black focus:text-black';
+    $itemClasses = 'leading-none px-3 py-2 mx-3 mt-2 text-gray-700 transition-colors duration-300 transform rounded-md hover:bg-gray-100 lg:mt-0 dark:text-gray-200 dark:hover:bg-gray-700';
 @endphp
 
-<li>
-    @if (filled($item['children']))
-        <x-dropdown>
-            <x-slot:trigger>
-                <button type="button" {{ $attributes->class([$itemClasses, '' => $active, 'flex items-center gap-2']) }}>
-                    <span>{{ $item['label'] }}</span>
-                    @svg('heroicon-s-chevron-down', '-me-2 h-3 w-3')
-                </button>
-            </x-slot>
+@if (isset($item['children']))
+<x-menus.dropdown>
+    <x-slot:trigger>
+            {{ $item['label'] }}
+        </x-slot>
 
-            <ul class="">
-                @foreach ($item['children'] as $child)
-                    <x-menus.main-menu.item :item="$child" />
-                @endforeach
-            </ul>
-        </x-dropdown>
+        @foreach ($item['children'] as $child)
+        <x-menus.main-menu.item :item="$child" class="px-4 py-4 mx-0 rounded-none" />
+        @endforeach
+</x-menus.dropdown>
+@else
+    @if (isset($item['url']))
+    <a href="{{ $item['url'] }}"
+        @if (isset($item['target'])) target="{{ $item['target'] }}" @endif
+        @if(isset($item['rel'])) rel="{{ $item['rel'] }}" @endif
+        {{ $attributes->class([$itemClasses, '' =>active_route($item['url'])]) }}">
+        {{ $item['label'] }}
+    </a>
     @else
-        @if (isset($item['url']))
-            <a href="{{ $item['url'] }}" @if ($item['target']) target="{{ $item['target'] }}" @endif @if ($item['rel']) rel="{{ $item['rel'] }}" @endif
-                {{ $attributes->class([$itemClasses, '' => active_route($item['url'])]) }}>
-                {{ $item['label'] }}
-            </a>
-        @else
-            <span {{ $attributes->class([$itemClasses, '' => $active]) }}>
-                {{ $item['label'] }}
-            </span>
-        @endif
+    <span {{ $attributes->class([$itemClasses, '' => $active]) }}>
+        {{ $item['label'] }}
+    </span>
     @endif
-</li>
+@endif
+
 ```
 
--   `dropdown.blade.php` in `resources/views/components/menus`
+- `dropdown.blade.php` in `resources/views/components/menus`
 
 ```php
 @props([
-    'maxHeight' => null,
-    'offset' => 8,
-    'placement' => 'bottom-start',
-    'shift' => false,
-    'teleport' => false,
     'trigger' => null,
-    'width' => null,
 ])
 
-@php
-    use Filament\Support\Enums\MaxWidth;
-@endphp
+<div
+    x-data="{
+        open: true,
+        toggle() {
+            if (this.open) {
+                return this.close()
+            }
 
-<div x-data="{
-    submenuOpen: false,
-    toggle: function(event) {
-        this.submenuOpen = !this.submenuOpen
-    },
-    open: function(event) {
-        this.submenuOpen = true
-    },
-    close: function(event) {
-        this.submenuOpen = false
-    },
-}" {{ $attributes->class(['dropdown relative']) }}>
-    <div x-on:click="toggle" {{ $trigger->attributes->class(['dropdown-trigger flex cursor-pointer']) }}>
+            this.$refs.button.focus()
+
+            this.open = true
+        },
+        close(focusAfter) {
+            if (! this.open) return
+
+            this.open = false
+
+            focusAfter && focusAfter.focus()
+        },
+    }"
+    x-on:keydown.escape.prevent.stop="close($refs.button)"
+    x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+    x-id="['dropdown-button']"
+    class="relative"
+>
+    <!-- Button -->
+    <button
+        x-ref="button"
+        x-on:click="toggle()"
+        type="button"
+        :aria-expanded="open"
+        :aria-controls="$id('dropdown-button')"
+        class="relative flex items-center justify-center gap-2 px-3 py-2 text-gray-700 transition-colors duration-300 transform rounded-md whitespace-nowrap hover:bg-gray-100 lg:mt-0 dark:text-gray-200 dark:hover:bg-gray-700"
+    >
         {{ $trigger }}
-    </div>
-    <div x-cloak @click.outside="submenuOpen = false" x-show="submenuOpen"
-        x-float{{ $placement ? ".placement.{$placement}" : '' }}.flip{{ $shift ? '.shift' : '' }}{{ $teleport ? '.teleport' : '' }}{{ $offset ? '.offset' : '' }}="{ offset: {{ $offset }} }" x-ref="panel" x-transition:enter-start="opacity-0"
-        x-transition:leave-end="opacity-0" @class([
-            'dropdown-panel absolute z-10 w-auto divide-y divide-neutral-100 rounded-lg bg-white shadow-lg ring-1 ring-neutral-950/5 transition',
-        ]) @style([
-            "max-height: {$maxHeight}" => $maxHeight,
-        ])>
+
+        @svg('heroicon-m-chevron-down', ['class' => 'size-4', 'x-bind:class' => '{ "rotate-180": open }'])
+    </button>
+
+    <!-- Panel -->
+    <div
+        x-ref="panel"
+        x-show="open"
+        x-transition.origin.top.left
+        x-on:click.outside="close($refs.button)"
+        :id="$id('dropdown-button')"
+        x-cloak
+        class="absolute left-0 z-10 flex flex-col mt-2 overflow-hidden origin-top-left bg-white border border-gray-200 rounded-lg shadow-sm outline-none min-w-48"
+    >
         {{ $slot }}
     </div>
 </div>
@@ -305,10 +315,10 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
--   [Francesco Apruzzese](https://github.com/postare)
--   [awcodes](https://github.com/awcodes) for inspiring this plugin with their experimental project [awcodes/sparky](https://github.com/awcodes/sparky).
--   Portions of this code were inspired by or adapted from the open-source community, particularly projects like [saade/filament-adjacency-list](https://github.com/saade/filament-adjacency-list) and [z3d0x/filament-fabricator](https://github.com/z3d0x/filament-fabricator).
--   [FilamentPHP](https://filamentphp.com) for providing the foundational framework and components used in this plugin.
+- [Francesco Apruzzese](https://github.com/postare)
+- [awcodes](https://github.com/awcodes) for inspiring this plugin with their experimental project [awcodes/sparky](https://github.com/awcodes/sparky).
+- Portions of this code were inspired by or adapted from the open-source community, particularly projects like [saade/filament-adjacency-list](https://github.com/saade/filament-adjacency-list) and [z3d0x/filament-fabricator](https://github.com/z3d0x/filament-fabricator).
+- [FilamentPHP](https://filamentphp.com) for providing the foundational framework and components used in this plugin.
 
 ## License
 

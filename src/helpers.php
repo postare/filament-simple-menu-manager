@@ -30,3 +30,16 @@ if (! function_exists('is_panel_auth_route')) {
         return Str::of(Request::path())->contains($authRoutes);
     }
 }
+
+if (! function_exists('removeEmptyValues')) {
+    function removeEmptyValues(array $array): array
+    {
+        // Applica array_map per garantire la ricorsività su tutti gli elementi
+        return array_filter(array_map(function ($value) {
+            return is_array($value) ? removeEmptyValues($value) : $value;
+        }, $array), function ($value) {
+            // Filtra valori vuoti mantenendo 0 e '0' come validi
+            return !empty($value) || $value === 0 || $value === '0';
+        });
+    }
+}
