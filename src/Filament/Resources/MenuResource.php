@@ -71,7 +71,7 @@ class MenuResource extends Resource
                         ->icon('heroicon-o-plus')
                         ->color('primary'))
                     ->columnSpanFull()
-                    ->rulers()
+                    ->childrenKey('children')
                     ->form([
                         Grid::make()
                             ->columns(2)
